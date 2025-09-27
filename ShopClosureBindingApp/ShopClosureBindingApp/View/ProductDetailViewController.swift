@@ -1,0 +1,49 @@
+//
+//  ProductDetailViewController.swift
+//  ShopClosureBindingApp
+//
+//  Created by Beyza Zengin on 27.09.2025.
+//
+
+import Foundation
+
+import UIKit
+
+final class ProductDetailViewController: UIViewController {
+    
+
+    @IBOutlet weak var productImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    
+    
+    var viewModel: ProductDetailViewModel?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+    }
+    
+    private func setupUI() {
+        guard let vm = viewModel else { return }
+        
+        titleLabel.text = vm.title
+        priceLabel.text = vm.priceText
+        descriptionLabel.text = vm.description
+        
+        if let url = URL(string: vm.imageURL) {
+            loadImage(from: url)
+        }
+    }
+    
+    private func loadImage(from url: URL) {
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.productImageView.image = image
+                }
+            }
+        }.resume()
+    }
+}
