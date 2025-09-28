@@ -21,6 +21,12 @@ final class ProductTableViewCell: UITableViewCell {
         productImageView.clipsToBounds = true
     }
     
+    /*
+     •    awakeFromNib() → hücre storyboard’dan yüklendiğinde bir kere çalışır.
+     •    productImageView.contentMode = .scaleAspectFill → resim kırpılmadan, kutuyu dolduracak şekilde gösterilsin.
+     •    clipsToBounds = true → resim kutunun dışına taşarsa kesilsin.
+     */
+    
     func configure(with product: Product) {
         titleLabel.text = product.title
         priceLabel.text = "$\(product.price)"
@@ -29,6 +35,14 @@ final class ProductTableViewCell: UITableViewCell {
             loadImage(from: url)
         }
     }
+    
+    /*
+     •    configure(with:) → hücreye bir Product verildiğinde çalışır.
+     •    titleLabel.text = product.title → ürün adı yazılır.
+     •    priceLabel.text = "$\(product.price)" → ürün fiyatı yazılır.
+     •    product.images.first → ürünün ilk resmi alınır (boş olabilir, o yüzden ?? "" ile boş string fallback veriyoruz).
+     •    Eğer geçerli bir URL varsa → resmi internetten yüklemek için loadImage(from:) çağrılır.
+     */
     
     private func loadImage(from url: URL) {
         URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
@@ -39,4 +53,12 @@ final class ProductTableViewCell: UITableViewCell {
             }
         }.resume()
     }
+    
+    /*
+     •    loadImage(from:) → internetten resmi indirir ve ekranda gösterir.
+     •    URLSession.shared.dataTask(with:) → verilen URL’den resmi indirir.
+     •    data → gelen ham resim verisi.
+     •    UIImage(data:) → gelen veriden görsel oluşturulur.
+     */
 }
+
